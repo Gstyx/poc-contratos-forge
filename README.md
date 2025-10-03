@@ -1,66 +1,50 @@
-## Foundry
+# PoC: Contratos Inteligentes para Simulação de Ataque de Oráculo
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Este repositório contém o ambiente on-chain para uma Prova de Conceito (PoC) que demonstra uma vulnerabilidade de manipulação de oráculo em um ecossistema DeFi simulado. Os contratos foram desenvolvidos utilizando Solidity e o framework Foundry.
 
-Foundry consists of:
+Este é o "mundo" onde o agente autônomo irá operar.
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## ⛓️ Stack Tecnológica
 
-## Documentation
+* **Linguagem:** Solidity
+* **Framework:** Foundry (Forge / Anvil)
 
-https://book.getfoundry.sh/
+## 📄 Contratos
 
-## Usage
+* `src/SimpleDEX.sol`: Uma exchange descentralizada simplificada, configurada com baixa liquidez para servir como um oráculo de preços vulnerável.
+* `src/LendingProtocol.sol`: Um protocolo de empréstimo que confia cegamente no preço fornecido pela `SimpleDEX` para calcular o valor do colateral dos usuários.
+* `src/TokenA.sol`: Um token ERC20 padrão utilizado como ativo no ecossistema.
 
-### Build
+## ⚙️ Como Utilizar
 
-```shell
-$ forge build
+### Pré-requisitos
+* [Foundry](https://getfoundry.sh/) instalado.
+
+### Testando a Vulnerabilidade
+Para validar a existência do exploit de forma isolada, execute os testes do Forge:
+```bash
+# Instalar dependências (OpenZeppelin)
+forge install
+
+# Compilar os contratos
+forge build
+
+# Rodar o teste de exploração
+forge test --vv
 ```
 
-### Test
+### Implantando em um Ambiente Local
+Para criar um ambiente vivo para o agente interagir, use o script de implantação com o Anvil.
+```bash
+# Terminal 1: Inicie a blockchain local
+anvil
 
-```shell
-$ forge test
+# Terminal 2: Implante os contratos
+# (substitua pela sua chave privada do Anvil)
+forge script script/Deploy.s.sol --rpc-url [http://127.0.0.1:8545](http://127.0.0.1:8545) --broadcast --private-key SUA_CHAVE_PRIVADA_DO_ANVIL
 ```
 
-### Format
+## 🔗 Repositórios do Projeto
 
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+* **Este Repositório (On-Chain):** `https://github.com/Gstyx/poc-contratos-forge`
+* **Agente Autônomo (Off-Chain):** `https://github.com/Gstyx/poc-agente-deno`
